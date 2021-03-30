@@ -10,7 +10,7 @@ namespace Persistence
     public class Seed
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager) {
-            if (!userManager.Users.Any() || context.Activities.Any()) {
+            if (!userManager.Users.Any() || !context.Activities.Any()) {
                 var users = new List<AppUser>
                 {
                     new AppUser{DisplayName = "Bob", UserName = "bob", Email = "bob@bob.bob"},
@@ -33,7 +33,7 @@ namespace Persistence
                         Category = "drinks",
                         City = "City 1",
                         Venue = "Venue 1",
-                        Attendees = new List<ActivityAttendee> { new ActivityAttendee{ AppUser = users[1] } }
+                        Attendees = new List<ActivityAttendee> { new ActivityAttendee{ AppUser = users[1], IsHost = true } }
                     },
                     new Activity
                     {
@@ -43,7 +43,7 @@ namespace Persistence
                         Category = "food",
                         City = "City 2",
                         Venue = "Venue 2",
-                        Attendees = new List<ActivityAttendee> { new ActivityAttendee{ AppUser = users[0] } }
+                        Attendees = new List<ActivityAttendee> { new ActivityAttendee{ AppUser = users[0], IsHost = true } }
                     },
                     new Activity
                     {
@@ -53,7 +53,7 @@ namespace Persistence
                         Category = "travel",
                         City = "City 3",
                         Venue = "Venue 3",
-                        Attendees = new List<ActivityAttendee> { new ActivityAttendee{ AppUser = users[2] } }
+                        Attendees = new List<ActivityAttendee> { new ActivityAttendee{ AppUser = users[2], IsHost = true } }
                     }
                 };
 

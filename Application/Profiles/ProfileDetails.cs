@@ -1,0 +1,41 @@
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Persistence;
+
+namespace Application.Profiles
+{
+    public class ProfileDetails
+    {
+        public class Query : IRequest<Result<Profile>>
+        {
+            public string Username { get; set; }
+        }
+
+        public class Handler : IRequestHandler<Query, Result<Profile>>
+        {
+            private readonly IMapper _mapper;
+            private readonly DataContext _context;
+
+            public Handler(DataContext context, IMapper mapper)
+            {
+                this._context = context;
+                this._mapper = mapper;
+            }
+
+            public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
+            {
+                var user = await _context.Users
+                    .ProjectTo<Profile>(_mapper.ConfigurationProvider)
+                    .SingleOrDefaultAsync(u => u.Username == request.Username);
+                
+                return user != null ? Result<Profile>.Success(user) : Result<Profile>.NotFound();
+            }
+        }
+    }
+}
