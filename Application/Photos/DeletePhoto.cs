@@ -38,7 +38,7 @@ namespace Application.Photos
 
                 var photo = user.Photos.FirstOrDefault(p => p.Id == request.Id);
                 if (photo == null) return Result<Unit>.NotFound();
-                if (photo.IsMain) return Result<Unit>.Failure("You cannot delete your main photo");
+                // if (photo.IsMain) return Result<Unit>.Failure("You cannot delete your main photo");
 
                 try
                 {

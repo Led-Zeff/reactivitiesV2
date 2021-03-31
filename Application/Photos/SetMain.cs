@@ -35,11 +35,12 @@ namespace Application.Photos
                 if (user == null) return Result<Unit>.NotFound();
 
                 var photo = user.Photos.FirstOrDefault(p => p.Id == request.Id);
-                if (photo != null) return Result<Unit>.NotFound();
+                if (photo == null) return Result<Unit>.NotFound();
 
                 var currentMain = user.Photos.FirstOrDefault(p => p.IsMain);
                 if (currentMain != null) currentMain.IsMain = false;
 
+                photo.IsMain = true;
                 var success = await _context.SaveChangesAsync() > 0;
                 return success ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem setting main photo");
             }

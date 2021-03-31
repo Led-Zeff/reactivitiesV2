@@ -12,7 +12,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(command));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
             return HandleResult(await Mediator.Send(new DeletePhoto.Command{ Id = id }));
