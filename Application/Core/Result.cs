@@ -14,6 +14,7 @@ namespace Application.Core
         public static Result<T> Success(T value) => new Result<T>{ Type = ResultType.SUCCESS, Value = value };
         public static Result<T> Success() => new Result<T>{ Type = ResultType.SUCCESS };
         public static Result<T> NotFound() => new Result<T>{ Type = ResultType.NOT_FOUND };
+        public static Result<T> NotFound(string error) => new Result<T>{ Type = ResultType.NOT_FOUND, Error = error };
         public static Result<T> Failure(string error) => new Result<T>{ Type = ResultType.FAILURE, Error = error };
     }
 }
