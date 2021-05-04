@@ -1,3 +1,4 @@
+using API.Extensions;
 using Application.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,15 @@ namespace API.Controllers
                 default:
                     return BadRequest(result.Error);
             }
+        }
+
+        protected ActionResult HandlePagedResult<T>(Result<PagedList<T>> result)
+        {
+            if (result.Type == ResultType.SUCCESS) {
+                Response.AddPaginationHeader(result.Value.CurrentPage, result.Value.PageSize,
+                    result.Value.TotalCount, result.Value.TotalPages);
+            }
+            return HandleResult(result);
         }
     }
 }

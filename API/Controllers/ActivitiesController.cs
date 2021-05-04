@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Activities;
+using Application.Core;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,9 @@ namespace API.Controllers
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Activity>>> GetActivities()
+        public async Task<ActionResult<List<Activity>>> GetActivities([FromQuery] PagingParams pagingParams)
         {
-            return HandleResult(await Mediator.Send(new ListAll.Query()));
+            return HandlePagedResult(await Mediator.Send(new ListAll.Query{ PagingParams = pagingParams }));
         }
 
         [HttpGet("{id}")]
