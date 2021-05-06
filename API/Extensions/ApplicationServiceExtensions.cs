@@ -1,3 +1,4 @@
+using System;
 using Application.Activities;
 using Application.Core;
 using Application.Interfaces;
@@ -25,7 +26,26 @@ namespace API.Extensions
 
             services.AddDbContext<DataContext>(opt =>
             {
-                opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                string connString;
+
+                if (env == "Production") {
+                    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
+                        .Replace("postgres://", string.Empty);
+                    
+                    var userPass = connUrl.Split("@")[0];
+                    var hostPortDb = connUrl.Split("@")[1];
+                    var hostPort = hostPortDb.Split("/")[0];
+                    var db = hostPortDb.Split("/")[1];
+                    var user = userPass.Split(":")[0];
+                    var pass = userPass.Split(":")[1];
+                    var host = hostPort.Split(":")[0];
+                    var port = hostPort.Split(":")[1];
+
+                    connString = $"Server={host}; Port={port}; User Id={user}; Password={pass}; Database={db}; SSL Mode=Require; Trust Server Certificate=true";
+                } else {
+                    connString = config.GetConnectionString("DefaultConnection");
+                }
             });
 
             services.AddCors(opt => {
