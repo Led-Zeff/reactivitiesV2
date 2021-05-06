@@ -46,6 +46,8 @@ namespace API.Extensions
                 } else {
                     connString = config.GetConnectionString("DefaultConnection");
                 }
+
+                opt.UseNpgsql(connString);
             });
 
             services.AddCors(opt => {
